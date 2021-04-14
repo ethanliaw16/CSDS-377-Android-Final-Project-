@@ -11,8 +11,11 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     private Context context;
@@ -26,21 +29,24 @@ public class MainActivity extends AppCompatActivity {
     public void makeWeatherRequest(View view){
         Toast.makeText(context, "Makine request for weather", Toast.LENGTH_SHORT);
         // Instantiate the RequestQueue.
+        System.out.println("Making request...");
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="https://www.google.com";
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+        String url ="https://api.openweathermap.org/data/2.5/weather?q=Cleveland&appid=44f4936e6e18098c789b1ada6e7c6fbd";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
                     @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        Toast.makeText(context, "Response is: "+ response.substring(0,500), Toast.LENGTH_SHORT);
+                    public void onResponse(JSONObject response) {
+                        System.out.println("Response: " + response.toString());
                     }
                 }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "That didnt work :(", Toast.LENGTH_SHORT);
-            }
-        });
-        queue.add(stringRequest);
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        System.out.println("ERROR :( " + error.getMessage());
+                    }
+                });
+        queue.add(jsonObjectRequest);
     }
 }
