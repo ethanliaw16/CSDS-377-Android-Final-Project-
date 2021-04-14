@@ -11,14 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="68dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="36dp"
         android:onClick="makeWeatherRequest"
         android:text="Make HTTP Weather Request"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switch1" />
+        app:layout_constraintTop_toBottomOf="@+id/notificationtoggle" />
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/weathermodetoggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="136dp"
@@ -26,6 +26,17 @@
         android:text="Weather Mode"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titletext" />
+
+    <Switch
+        android:id="@+id/notificationtoggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="36dp"
+        android:checked="false"
+        android:text="Enable Notification Listening"
+        app:layout_constraintStart_toStartOf="@+id/weatherRequest"
+        app:layout_constraintTop_toBottomOf="@+id/weathermodetoggle" />
 
     <TextView
         android:id="@+id/titletext"

@@ -1,11 +1,18 @@
 package com.example.lampifinalproject;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Notification;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -21,14 +28,36 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity {
     private Context context;
     private RequestQueue myQueue;
+    private boolean notificationsOn = false;
+    public static String INTENT_ACTION_NOTIFICATION = "com.example.lampifinalproject.LampiNotificationListener";
+    protected MyReceiver mReceiver = new MyReceiver();
+    public Switch notificationToggle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         context = getBaseContext();
         myQueue = Volley.newRequestQueue(this);
         super.onCreate(savedInstanceState);
+
         Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
         startActivity(intent);
+
+        notificationToggle = (Switch) findViewById(R.id.notificationtoggle);
+        notificationToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    if (mReceiver == null) mReceiver = new MyReceiver();
+                    registerReceiver(mReceiver, new IntentFilter(INTENT_ACTION_NOTIFICATION));
+                } else {
+                    unregisterReceiver(mReceiver);
+                }
+            }
+        });
+
         setContentView(R.layout.activity_main);
+    }
+
+    public void onNotificationsChanged(){
+
     }
 
     public void makeWeatherRequest(View view){
@@ -79,5 +108,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         myQueue.add(jsonObjectRequest);
+    }
+
+    public class MyReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (intent != null) {
+                Bundle extras = intent.getExtras();
+                String notificationTitle = extras.getString(Notification.EXTRA_TITLE);
+                int notificationIcon = extras.getInt(Notification.EXTRA_SMALL_ICON);
+                Bitmap notificationLargeIcon = ((Bitmap) extras.getParcelable(Notification.EXTRA_LARGE_ICON));
+                CharSequence notificationText = extras.getCharSequence(Notification.EXTRA_TEXT);
+                CharSequence notificationSubText = extras.getCharSequence(Notification.EXTRA_SUB_TEXT);
+
+                System.out.println("Title: " + notificationTitle);
+                System.out.println("Content: " + notificationText);
+                System.out.println("SubContent: " + notificationSubText);
+
+                if (notificationLargeIcon != null) {
+                    System.out.println("There's a pic too!");
+                }
+            }
+
+        }
     }
 }
