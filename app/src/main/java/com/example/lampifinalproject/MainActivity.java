@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void makeWeatherRequest(View view){
-        Toast.makeText(context, "Makine request for weather", Toast.LENGTH_SHORT);
+        Toast.makeText(getBaseContext(), "Makine request for weather", Toast.LENGTH_SHORT);
         // Instantiate the RequestQueue.
         System.out.println("Making request...");
         RequestQueue queue = Volley.newRequestQueue(this);
