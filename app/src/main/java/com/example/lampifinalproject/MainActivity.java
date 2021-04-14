@@ -3,6 +3,7 @@ package com.example.lampifinalproject;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
         context = getBaseContext();
         myQueue = Volley.newRequestQueue(this);
         super.onCreate(savedInstanceState);
+        Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+        startActivity(intent);
         setContentView(R.layout.activity_main);
     }
 
