@@ -41,19 +41,23 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
         startActivity(intent);
 
+        setContentView(R.layout.activity_main);
+
         notificationToggle = (Switch) findViewById(R.id.notificationtoggle);
         notificationToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    System.out.println("Notifications on");
                     if (mReceiver == null) mReceiver = new MyReceiver();
                     registerReceiver(mReceiver, new IntentFilter(INTENT_ACTION_NOTIFICATION));
                 } else {
+                    System.out.println("Notifications off");
                     unregisterReceiver(mReceiver);
                 }
             }
         });
 
-        setContentView(R.layout.activity_main);
+
     }
 
     public void onNotificationsChanged(){
