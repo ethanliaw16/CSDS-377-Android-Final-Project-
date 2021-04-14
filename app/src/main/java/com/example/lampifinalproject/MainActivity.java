@@ -19,9 +19,11 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     private Context context;
+    private RequestQueue myQueue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         context = getBaseContext();
+        myQueue = Volley.newRequestQueue(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
@@ -30,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getBaseContext(), "Makine request for weather", Toast.LENGTH_SHORT);
         // Instantiate the RequestQueue.
         System.out.println("Making request...");
-        RequestQueue queue = Volley.newRequestQueue(this);
+        //RequestQueue queue = Volley.newRequestQueue(this);
         String url ="https://api.openweathermap.org/data/2.5/weather?q=Cleveland&appid=44f4936e6e18098c789b1ada6e7c6fbd";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -42,6 +44,16 @@ public class MainActivity extends AppCompatActivity {
                             System.out.println("Humidity: " + response.getJSONObject("main").getInt("humidity"));
                             double temp = response.getJSONObject("main").getDouble("temp");
                             int humidity = response.getJSONObject("main").getInt("humidity");
+                            String ec2Url = "http://...";
+                            JSONObject weatherPostData = new JSONObject();
+                            weatherPostData.put("temp", temp);
+                            weatherPostData.put("humidity", humidity);
+                            /*JsonObjectRequest weatherPostRequest = new JsonObjectRequest(ec2Url, weatherPostData, new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+
+                                }
+                            });*/
                         }
                         catch (Exception e){
                             System.out.println(e.getMessage());
@@ -55,6 +67,6 @@ public class MainActivity extends AppCompatActivity {
                         System.out.println("ERROR :( " + error.getMessage());
                     }
                 });
-        queue.add(jsonObjectRequest);
+        myQueue.add(jsonObjectRequest);
     }
 }
