@@ -40,20 +40,32 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try{
-                            System.out.println("Temperature: " + response.getJSONObject("main").getDouble("temp"));
-                            System.out.println("Humidity: " + response.getJSONObject("main").getInt("humidity"));
+                            //System.out.println("Temperature: " + response.getJSONObject("main").getDouble("temp"));
+                            //System.out.println("Humidity: " + response.getJSONObject("main").getInt("humidity"));
                             double temp = response.getJSONObject("main").getDouble("temp");
+                            temp -= 273.15;
+                            temp *= (9.0/5.0);
+                            temp += 32;
                             int humidity = response.getJSONObject("main").getInt("humidity");
-                            String ec2Url = "http://...";
+                            String ec2Url = "http://34.226.146.171:8000/update-weather";
                             JSONObject weatherPostData = new JSONObject();
+                            System.out.println("Adding " + temp + " as temp");
                             weatherPostData.put("temp", temp);
                             weatherPostData.put("humidity", humidity);
-                            /*JsonObjectRequest weatherPostRequest = new JsonObjectRequest(ec2Url, weatherPostData, new Response.Listener<JSONObject>() {
+                            JsonObjectRequest weatherPostRequest = new JsonObjectRequest(ec2Url, weatherPostData, new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
-
+                                    System.out.println(response);
                                 }
-                            });*/
+                            }, new Response.ErrorListener() {
+
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    // TODO: Handle error
+                                    System.out.println("ERROR :( " + error.getMessage());
+                                }
+                            });
+                            myQueue.add(weatherPostRequest);
                         }
                         catch (Exception e){
                             System.out.println(e.getMessage());
