@@ -37,7 +37,15 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        System.out.println("Response: " + response.toString());
+                        try{
+                            System.out.println("Temperature: " + response.getJSONObject("main").getDouble("temp"));
+                            System.out.println("Humidity: " + response.getJSONObject("main").getInt("humidity"));
+                            double temp = response.getJSONObject("main").getDouble("temp");
+                            int humidity = response.getJSONObject("main").getInt("humidity");
+                        }
+                        catch (Exception e){
+                            System.out.println(e.getMessage());
+                        }
                     }
                 }, new Response.ErrorListener() {
 
