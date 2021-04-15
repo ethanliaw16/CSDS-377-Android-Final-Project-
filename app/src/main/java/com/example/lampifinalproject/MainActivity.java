@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -24,6 +25,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
     private Context context;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean notificationsOn = false;
     public static String INTENT_ACTION_NOTIFICATION = "com.example.lampifinalproject.notification";
     protected MyReceiver mReceiver = new MyReceiver();
+    protected TextView text;
     public Switch notificationToggle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
+        text = (TextView) findViewById(R.id.notificationtext);
 
     }
 
@@ -130,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Title: " + notificationTitle);
                 System.out.println("Content: " + notificationText);
                 System.out.println("SubContent: " + notificationSubText);
+                text.setText(notificationText);
 
                 if (notificationLargeIcon != null) {
                     System.out.println("There's a pic too!");

@@ -14,10 +14,18 @@ import androidx.annotation.RequiresApi;
 @SuppressLint("OverrideAbstract")
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class LampiNotificationListener extends NotificationListenerService {
+
+    @Override
+    public void onCreate(){
+        System.out.println("Listener - oncreate called.");
+        super.onCreate();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
         Notification mNotification=sbn.getNotification();
+        System.out.println("Got a notification on the listener.");
         if (mNotification!=null){
             Bundle extras = mNotification.extras;
 
