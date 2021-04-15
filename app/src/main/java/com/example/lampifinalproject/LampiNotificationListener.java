@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -31,6 +32,7 @@ public class LampiNotificationListener extends NotificationListenerService {
 
             Intent intent = new Intent(MainActivity.INTENT_ACTION_NOTIFICATION);//
             intent.putExtras(mNotification.extras);
+            Log.v("INFO", extras.toString());
             sendBroadcast(intent);
 
             Notification.Action[] mActions = mNotification.actions;
