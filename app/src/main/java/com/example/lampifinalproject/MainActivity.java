@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
 
             if (intent != null) {
+                System.out.println("Broadcast Receiver - got notification");
                 Bundle extras = intent.getExtras();
                 String notificationTitle = extras.getString(Notification.EXTRA_TITLE);
                 int notificationIcon = extras.getInt(Notification.EXTRA_SMALL_ICON);

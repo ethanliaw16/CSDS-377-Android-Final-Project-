@@ -25,8 +25,7 @@
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
             tools:ignore="HardcodedDebugMode">
             <intent-filter>
-                <action android:name="android.service.
-                 notification.NotificationListenerService" />
+                <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
 
         </service>
