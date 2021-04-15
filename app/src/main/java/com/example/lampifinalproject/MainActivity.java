@@ -65,10 +65,6 @@ public class MainActivity extends AppCompatActivity {
         text.setText("This is where the notifications be going");
     }
 
-    public void onNotificationsChanged(){
-
-    }
-
     public void makeWeatherRequest(View view){
         Toast.makeText(getBaseContext(), "Makine request for weather", Toast.LENGTH_SHORT);
         // Instantiate the RequestQueue.
