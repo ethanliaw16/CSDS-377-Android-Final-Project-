@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     public static String INTENT_ACTION_NOTIFICATION = "com.example.lampifinalproject.notification";
     protected MyReceiver mReceiver = new MyReceiver();
     protected TextView text;
+    protected TextView subText;
     public Switch notificationToggle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         text = (TextView) findViewById(R.id.notificationtext);
+        text = (TextView) findViewById(R.id.notificationsubtext);
         text.setText("This is where the notifications be going");
     }
 
@@ -134,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Content: " + notificationText);
                 System.out.println("SubContent: " + notificationSubText);
                 text.setText(notificationText);
+                subText.setText(notificationSubText);
             }
 
         }
