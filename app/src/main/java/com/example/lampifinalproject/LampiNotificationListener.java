@@ -21,7 +21,7 @@ public class LampiNotificationListener extends NotificationListenerService {
         if (mNotification!=null){
             Bundle extras = mNotification.extras;
 
-            Intent intent = new Intent("");//MainActivity.INTENT_ACTION_NOTIFICATION
+            Intent intent = new Intent(MainActivity.INTENT_ACTION_NOTIFICATION);//
             intent.putExtras(mNotification.extras);
             sendBroadcast(intent);
 

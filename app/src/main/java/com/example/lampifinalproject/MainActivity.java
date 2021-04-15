@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private Context context;
     private RequestQueue myQueue;
     private boolean notificationsOn = false;
-    public static String INTENT_ACTION_NOTIFICATION = "com.example.lampifinalproject.LampiNotificationListener";
+    public static String INTENT_ACTION_NOTIFICATION = "com.example.lampifinalproject.notification";
     protected MyReceiver mReceiver = new MyReceiver();
     public Switch notificationToggle;
     @Override
