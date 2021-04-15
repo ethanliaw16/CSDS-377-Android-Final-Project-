@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private RequestQueue myQueue;
     private boolean notificationsOn = false;
     public static String INTENT_ACTION_NOTIFICATION = "com.example.lampifinalproject.notification";
+    public static String NOTIFICATION_APP = "app";
+    public static String NOTIFICATION_SENDER = "sender";
+    public static String NOTIFICATION_MESSAGE = "message";
     protected MyReceiver mReceiver = new MyReceiver();
     protected TextView text;
     protected TextView subText;
@@ -115,6 +118,33 @@ public class MainActivity extends AppCompatActivity {
         myQueue.add(jsonObjectRequest);
     }
 
+    public void makeNotificationRequest(String app, String sender, String message){
+        System.out.println("making notification request to api");
+        JSONObject notificationPostData = new JSONObject();
+        String notificationURL = "http://34.226.146.171:8000/update-notification";
+        try{
+            notificationPostData.put("app", app);
+            notificationPostData.put("sender", sender);
+            notificationPostData.put("message",message);
+            JsonObjectRequest notificationRequest = new JsonObjectRequest(notificationURL, notificationPostData, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
+
+            myQueue.add(notificationRequest);
+        } catch (Exception e){
+            System.out.println("Oop something went wrong");
+        }
+
+    }
+
     public class MyReceiver extends BroadcastReceiver {
 
         @Override
@@ -124,15 +154,16 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Broadcast Receiver - intent wasn't null");
                 Bundle extras = intent.getExtras();
                 System.out.println("Extras: " + intent.getExtras());
-                String notificationTitle = extras.getString("NOTIFICATION_TITLE");
-                String notificationText = extras.getString("NOTIFICATION_TEXT");
-                String notificationSubText = extras.getString("NOTIFICATION_SUB_TEXT");
+                String notificationApp = extras.getString(NOTIFICATION_APP);
+                String sender = extras.getString(NOTIFICATION_SENDER);
+                String message = extras.getString(NOTIFICATION_MESSAGE);
 
-                System.out.println("Title: " + notificationTitle);
-                System.out.println("Content: " + notificationText);
-                System.out.println("SubContent: " + notificationSubText);
-                text.setText(notificationText);
-                subText.setText(notificationSubText);
+                System.out.println("Title: " + notificationApp);
+                System.out.println("Content: " + sender);
+                System.out.println("SubContent: " + message);
+                text.setText(sender);
+                subText.setText(message);
+                makeNotificationRequest(notificationApp, sender, message);
             }
 
         }
