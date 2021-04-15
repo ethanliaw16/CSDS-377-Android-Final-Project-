@@ -121,24 +121,19 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
+            System.out.println("Broadcast Receiver - got notification");
             if (intent != null) {
-                System.out.println("Broadcast Receiver - got notification");
+                System.out.println("Broadcast Receiver - intent wasn't null");
                 Bundle extras = intent.getExtras();
-                String notificationTitle = extras.getString(Notification.EXTRA_TITLE);
-                int notificationIcon = extras.getInt(Notification.EXTRA_SMALL_ICON);
-                Bitmap notificationLargeIcon = ((Bitmap) extras.getParcelable(Notification.EXTRA_LARGE_ICON));
-                CharSequence notificationText = extras.getCharSequence(Notification.EXTRA_TEXT);
-                CharSequence notificationSubText = extras.getCharSequence(Notification.EXTRA_SUB_TEXT);
+                System.out.println("Extras: " + intent.getExtras());
+                String notificationTitle = extras.getString("NOTIFICATION_TITLE");
+                String notificationText = extras.getString("NOTIFICATION_TEXT");
+                String notificationSubText = extras.getString("NOTIFICATION_SUB_TEXT");
 
                 System.out.println("Title: " + notificationTitle);
                 System.out.println("Content: " + notificationText);
                 System.out.println("SubContent: " + notificationSubText);
                 text.setText(notificationText);
-
-                if (notificationLargeIcon != null) {
-                    System.out.println("There's a pic too!");
-                }
             }
 
         }

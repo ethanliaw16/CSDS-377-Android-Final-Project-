@@ -29,20 +29,25 @@ public class LampiNotificationListener extends NotificationListenerService {
         System.out.println("Got a notification on the listener.");
         if (mNotification!=null){
             Bundle extras = mNotification.extras;
-
+            System.out.println(mNotification.extras.toString());
+            String notificationTitle = mNotification.extras.getString(Notification.EXTRA_TITLE);
+            CharSequence foo = extras.getCharSequence(Notification.EXTRA_BIG_TEXT);
+            String notificationText = "";
+            if(foo != null){
+                notificationText = foo.toString();
+            }
+            CharSequence bar = extras.getCharSequence(Notification.EXTRA_SUB_TEXT);
+            String notificationSubText = "";
+            if(bar != null){
+                notificationSubText = bar.toString();
+            }
             Intent intent = new Intent(MainActivity.INTENT_ACTION_NOTIFICATION);//
-            intent.putExtras(mNotification.extras);
-            Log.v("INFO", extras.toString());
+            intent.putExtra("NOTIFICATION_TITLE", notificationTitle);
+            intent.putExtra("NOTIFICATION_TEXT", notificationText);
+            intent.putExtra("NOTIFICATION_SUB_TEXT", notificationSubText);//, notificationText, notificationSubText);
             sendBroadcast(intent);
 
-            Notification.Action[] mActions = mNotification.actions;
-            if (mActions!=null){
-                for (Notification.Action mAction:mActions){
-                    int icon=mAction.icon;
-                    CharSequence actionTitle=mAction.title;
-                    PendingIntent pendingIntent=mAction.actionIntent;
-                }
-            }
+
         }
     }
 
