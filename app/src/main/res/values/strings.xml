@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">LAMPI Final Project</string>
     <string name="lampi">LAMPI</string>
+    <string name="service_name">LampiNotificationListener</string>
 </resources>

@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         text = (TextView) findViewById(R.id.notificationtext);
-
+        text.setText("This is where the notifications be going");
     }
 
     public void onNotificationsChanged(){
