@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class MyReceiver extends BroadcastReceiver {
-
+        private String lastMessage = "";
         @Override
         public void onReceive(Context context, Intent intent) {
             System.out.println("Broadcast Receiver - got notification");
@@ -158,12 +158,16 @@ public class MainActivity extends AppCompatActivity {
                 String sender = extras.getString(NOTIFICATION_SENDER);
                 String message = extras.getString(NOTIFICATION_MESSAGE);
 
-                System.out.println("Title: " + notificationApp);
-                System.out.println("Content: " + sender);
-                System.out.println("SubContent: " + message);
+                //System.out.println("Title: " + notificationApp);
+                //System.out.println("Content: " + sender);
+                //System.out.println("SubContent: " + message);
                 text.setText(sender);
                 subText.setText(message);
-                makeNotificationRequest(notificationApp, sender, message);
+                if(!lastMessage.equals(message)){
+                    //System.out.println("Last message was " + lastMessage + ", this message is " + message);
+                    makeNotificationRequest(notificationApp, sender, message);
+                }
+                lastMessage = message;
             }
 
         }
