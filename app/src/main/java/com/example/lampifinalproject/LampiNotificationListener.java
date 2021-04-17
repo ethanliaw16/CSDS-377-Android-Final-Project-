@@ -63,14 +63,16 @@ public class LampiNotificationListener extends NotificationListenerService {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
+        System.out.println("Got a notification on the listener.");
+
         if ((sbn.getNotification().flags & Notification.FLAG_GROUP_SUMMARY) != 0) {
             //Ignore the notification
             System.out.println(sbn.getNotification().toString());
             System.out.println("Group summary notification");
             return;
         }
+
         Notification mNotification=sbn.getNotification();
-        System.out.println("Got a notification on the listener.");
         if (!sbn.getKey().equals(mPreviousNotificationKey)){
             if (mNotification!=null){
                 Bundle extras = mNotification.extras;
