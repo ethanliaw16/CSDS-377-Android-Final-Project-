@@ -16,6 +16,8 @@ public class LampiNotificationListener extends NotificationListenerService {
     private String GOOGLE_APP_INFO = "com.google.android.gm";
     private String FB_APP_INFO = "com.facebook";
     private String SNAP_APP_INFO = "com.snapchat";
+    private String mPreviousNotificationKey;
+
     @Override
     public void onCreate(){
         System.out.println("Listener - oncreate called.");
@@ -57,38 +59,48 @@ public class LampiNotificationListener extends NotificationListenerService {
         return payload;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
+        if ((sbn.getNotification().flags & Notification.FLAG_GROUP_SUMMARY) != 0) {
+            //Ignore the notification
+            System.out.println(sbn.getNotification().toString());
+            System.out.println("Group summary notification");
+            return;
+        }
         Notification mNotification=sbn.getNotification();
         System.out.println("Got a notification on the listener.");
-        if (mNotification!=null){
-            Bundle extras = mNotification.extras;
-            String allExtras = mNotification.extras.toString();
-            String[] payload = {"Unknown Application", "","Open your phone to see notification"};
-            if(allExtras.contains(GOOGLE_APP_INFO)){
-                System.out.println("got google");
-                payload = payloadFromGoogleNotification(mNotification);
-            }
-            else if (allExtras.contains(FB_APP_INFO)){
-                System.out.println("got facebook");
-                payload = payloadFromFbNotification(mNotification);
-            }
-            else if (allExtras.contains(SNAP_APP_INFO)){
-                System.out.println("got snapchat");
-                payload = payloadFromSnapNotification(mNotification);
-            }
-            System.out.println(allExtras);
+        if (!sbn.getKey().equals(mPreviousNotificationKey)){
+            if (mNotification!=null){
+                Bundle extras = mNotification.extras;
+                String allExtras = mNotification.extras.toString();
+                String[] payload = {"Unknown Application", "","Open your phone to see notification"};
+                if(allExtras.contains(GOOGLE_APP_INFO)){
+                    System.out.println("got google");
+                    payload = payloadFromGoogleNotification(mNotification);
+                }
+                else if (allExtras.contains(FB_APP_INFO)){
+                    System.out.println("got facebook");
+                    payload = payloadFromFbNotification(mNotification);
+                }
+                else if (allExtras.contains(SNAP_APP_INFO)){
+                    System.out.println("got snapchat");
+                    payload = payloadFromSnapNotification(mNotification);
+                }
+                System.out.println(allExtras);
 
-            Intent intent = new Intent(MainActivity.INTENT_ACTION_NOTIFICATION);//
-            intent.putExtra(MainActivity.NOTIFICATION_APP, payload[0]);
-            intent.putExtra(MainActivity.NOTIFICATION_SENDER, payload[1]);
-            intent.putExtra(MainActivity.NOTIFICATION_MESSAGE, payload[2]);//, notificationText, notificationSubText);
-            sendBroadcast(intent);
-
+                Intent intent = new Intent(MainActivity.INTENT_ACTION_NOTIFICATION);//
+                intent.putExtra(MainActivity.NOTIFICATION_APP, payload[0]);
+                intent.putExtra(MainActivity.NOTIFICATION_SENDER, payload[1]);
+                intent.putExtra(MainActivity.NOTIFICATION_MESSAGE, payload[2]);//, notificationText, notificationSubText);
+                sendBroadcast(intent);
+            }
 
         }
+        mPreviousNotificationKey = sbn.getKey();
     }
+
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {

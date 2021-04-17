@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public static String NOTIFICATION_APP = "app";
     public static String NOTIFICATION_SENDER = "sender";
     public static String NOTIFICATION_MESSAGE = "message";
+    private String[] allowedApps = {"Gmail","Messenger","Snapchat"};
     protected MyReceiver mReceiver = new MyReceiver();
     protected TextView text;
     protected TextView subText;
@@ -163,9 +164,11 @@ public class MainActivity extends AppCompatActivity {
                 //System.out.println("SubContent: " + message);
                 text.setText(sender);
                 subText.setText(message);
-                if(!lastMessage.equals(message)){
-                    //System.out.println("Last message was " + lastMessage + ", this message is " + message);
-                    makeNotificationRequest(notificationApp, sender, message);
+                for(String app : allowedApps){
+                    if(app.equals(notificationApp)){
+                        //System.out.println("Last message was " + lastMessage + ", this message is " + message);
+                        makeNotificationRequest(notificationApp, sender, message);
+                    }
                 }
                 lastMessage = message;
             }
