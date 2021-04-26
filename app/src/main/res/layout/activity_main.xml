@@ -69,10 +69,10 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="68dp"
         android:layout_marginStart="68dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notificationtoggle" />
+        app:layout_constraintTop_toBottomOf="@+id/goToLocationPicker" />
 
     <TextView
         android:id="@+id/locationPickerLabel"
@@ -105,5 +105,16 @@
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cityForWeather" />
+
+    <Button
+        android:id="@+id/goToLocationPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:onClick="goToLocationPicker"
+        android:text="Use Location Picker"
+        app:layout_constraintBottom_toBottomOf="@+id/locationPickerLabel"
+        app:layout_constraintStart_toEndOf="@+id/locationPickerLabel"
+        app:layout_constraintTop_toTopOf="@+id/locationPickerLabel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

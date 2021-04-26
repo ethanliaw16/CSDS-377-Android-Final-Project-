@@ -3,4 +3,7 @@
     <string name="lampi">LAMPI</string>
     <string name="service_name">LampiNotificationListener</string>
     <string name="title_activity_location_picker">Map</string>
+    <string name="action_geolocate">Choose This Location</string>
+    <string name="default_info_title">Default Location</string>
+    <string name="default_info_snippet">No places found, because location permission is disabled.</string>
 </resources>
