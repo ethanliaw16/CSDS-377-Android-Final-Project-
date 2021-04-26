@@ -1,17 +1,16 @@
 package com.example.lampifinalproject;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,13 +20,17 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private Context context;
     private RequestQueue myQueue;
     private boolean notificationsOn = false;
@@ -35,10 +38,18 @@ public class MainActivity extends AppCompatActivity {
     public static String NOTIFICATION_APP = "app";
     public static String NOTIFICATION_SENDER = "sender";
     public static String NOTIFICATION_MESSAGE = "message";
+    public static final String WEATHER_API_TOKEN = "44f4936e6e18098c789b1ada6e7c6fbd";
+    public static final String WEATHER_API_BASE_URL = "https://api.openweathermap.org/data/2.5/weather?q=";
     private String[] allowedApps = {"Gmail","Messenger","Snapchat"};
+    String[] cities = new String[]{"Cleveland,Ohio","Anchorage,Alaska","Lupin,Nunavut","Houston,Texas"};
+    private int currentlySelectedCity = 0;
+    private List<String> allowedCities = new ArrayList<String>(Arrays.asList(cities));
     protected MyReceiver mReceiver = new MyReceiver();
     protected TextView text;
     protected TextView subText;
+    protected TextView cityText;
+    protected TextView cityWeatherText;
+    protected Spinner locationPicker;
     public Switch notificationToggle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
         setContentView(R.layout.activity_main);
+
+        locationPicker = findViewById(R.id.simpleLocationPicker);
+        ArrayAdapter<String> locationPickerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, cities);
+        locationPicker.setAdapter(locationPickerAdapter);
+        locationPicker.setOnItemSelectedListener(this);
 
         notificationToggle = (Switch) findViewById(R.id.notificationtoggle);
         notificationToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -64,23 +80,35 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        text = (TextView) findViewById(R.id.notificationtext);
-        subText = (TextView) findViewById(R.id.notificationsubtext);
+
+        text = findViewById(R.id.notificationtext);
+        subText = findViewById(R.id.notificationsubtext);
+        cityText = findViewById(R.id.cityForWeather);
+        cityWeatherText = findViewById(R.id.tempAndHumidity);
         text.setText("This is where the notifications be going");
+        cityWeatherText.setText("This is where the weather deets be going");
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+        // An item was selected. You can retrieve the selected item using
+        Log.i("Location picker", "Picked " + parent.getItemAtPosition(pos).toString());
+        currentlySelectedCity = pos;
+        cityText.setText(cities[currentlySelectedCity]);
+        // parent.getItemAtPosition(pos)
     }
 
     @Override
-    protected void OnDestroy(){
-        
+    public void onNothingSelected(AdapterView<?> parent) {
+        Log.i("Location picker", "Nothing Selected");
     }
-
 
     public void makeWeatherRequest(View view){
         Toast.makeText(getBaseContext(), "Makine request for weather", Toast.LENGTH_SHORT);
         // Instantiate the RequestQueue.
-        System.out.println("Making request...");
+        System.out.println("Making request for " + cities[currentlySelectedCity]);
         //RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="https://api.openweathermap.org/data/2.5/weather?q=Cleveland&appid=44f4936e6e18098c789b1ada6e7c6fbd";
+        String url =WEATHER_API_BASE_URL + cities[currentlySelectedCity] + "&appid=" + WEATHER_API_TOKEN;//"https://api.openweathermap.org/data/2.5/weather?q=Cleveland&appid=44f4936e6e18098c789b1ada6e7c6fbd";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -95,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                     String ec2Url = "http://34.226.146.171:8000/update-weather";
                     JSONObject weatherPostData = new JSONObject();
                     System.out.println("Adding " + temp + " as temp");
+                    cityWeatherText.setText("Temperature: " + temp + " Humidity: " + humidity);
                     weatherPostData.put("temp", temp);
                     weatherPostData.put("humidity", humidity);
                     JsonObjectRequest weatherPostRequest = new JsonObjectRequest(ec2Url, weatherPostData, new Response.Listener<JSONObject>() {

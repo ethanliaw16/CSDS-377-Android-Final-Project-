@@ -10,33 +10,25 @@
         android:id="@+id/weatherRequest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginEnd="38dp"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="20dp"
         android:onClick="makeWeatherRequest"
         android:text="Make HTTP Weather Request"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notificationtoggle" />
-
-    <Switch
-        android:id="@+id/weathermodetoggle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="136dp"
-        android:layout_marginTop="80dp"
-        android:text="Weather Mode"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titletext" />
+        app:layout_constraintTop_toBottomOf="@+id/simpleLocationPicker" />
 
     <Switch
         android:id="@+id/notificationtoggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="32dp"
         android:checked="false"
         android:text="Enable Notification Listening"
-        app:layout_constraintStart_toStartOf="@+id/weatherRequest"
-        app:layout_constraintTop_toBottomOf="@+id/weathermodetoggle" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titletext" />
 
     <TextView
         android:id="@+id/titletext"
@@ -49,7 +41,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.206" />
+        app:layout_constraintVertical_bias="0.084" />
 
     <TextView
         android:id="@+id/notificationtext"
@@ -70,5 +62,48 @@
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/notificationtext" />
+
+    <Spinner
+        android:id="@+id/simpleLocationPicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="68dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notificationtoggle" />
+
+    <TextView
+        android:id="@+id/locationPickerLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="9dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="22dp"
+        android:text="Pick A City"
+        app:layout_constraintBottom_toTopOf="@+id/simpleLocationPicker"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notificationtoggle" />
+
+    <TextView
+        android:id="@+id/cityForWeather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="67dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notificationsubtext" />
+
+    <TextView
+        android:id="@+id/tempAndHumidity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="26dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cityForWeather" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
