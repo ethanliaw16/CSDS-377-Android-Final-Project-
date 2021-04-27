@@ -1,12 +1,14 @@
 package com.example.lampifinalproject;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -70,9 +72,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         cities = cityLocations.keySet().toArray(new String[cityLocations.keySet().size()]);
         super.onCreate(savedInstanceState);
 
-        Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-        startActivity(intent);
 
+        ComponentName cn = new ComponentName(context, LampiNotificationListener.class);
+        String flattenedComponents = Settings.Secure.getString(context.getContentResolver(), "enabled_notification_listeners");
+        final boolean notificationListenerEnabled = flattenedComponents != null && flattenedComponents.contains(cn.flattenToString());
+
+        if(!notificationListenerEnabled){
+            Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+            startActivity(intent);
+        }
+        
         setContentView(R.layout.activity_main);
         Intent intentFromLocationPicker = getIntent();
         if(intentFromLocationPicker != null){
