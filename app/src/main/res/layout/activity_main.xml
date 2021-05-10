@@ -6,59 +6,68 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/weatherRequest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="38dp"
-        android:layout_marginStart="38dp"
-        android:layout_marginTop="20dp"
-        android:onClick="makeWeatherRequest"
-        android:text="Make HTTP Weather Request"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/simpleLocationPicker" />
-
     <Switch
         android:id="@+id/notificationtoggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginTop="16dp"
         android:checked="false"
-        android:text="Enable Notification Listening"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titletext" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setdeviceidbutton" />
 
     <TextView
         android:id="@+id/titletext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/lampi"
-        android:textSize="36sp"
+        android:layout_marginTop="16dp"
+        android:text="No LAMPI Set"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.084" />
+        app:layout_constraintVertical_bias="0.057" />
 
-    <TextView
-        android:id="@+id/notificationtext"
+    <Button
+        android:id="@+id/goToLocationPicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="38dp"
-        android:layout_marginTop="38dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginTop="16dp"
+        android:onClick="goToLocationPicker"
+        android:text="Use Location Picker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/motionsensortoggle" />
+
+    <TextView
+        android:id="@+id/locationPickerLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="60dp"
+        android:text="Pick A City"
+        app:layout_constraintBottom_toTopOf="@+id/simpleLocationPicker"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/goToLocationPicker"
+        app:layout_constraintVertical_bias="0.73" />
+
+    <TextView
+        android:id="@+id/cityForWeather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="28dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weatherRequest" />
+        app:layout_constraintTop_toBottomOf="@+id/notificationsubtext" />
 
     <TextView
         android:id="@+id/notificationsubtext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="32dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/notificationtext" />
@@ -69,52 +78,99 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="68dp"
         android:layout_marginStart="68dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="17dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/goToLocationPicker" />
-
-    <TextView
-        android:id="@+id/locationPickerLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="9dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="22dp"
-        android:text="Pick A City"
-        app:layout_constraintBottom_toTopOf="@+id/simpleLocationPicker"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notificationtoggle" />
-
-    <TextView
-        android:id="@+id/cityForWeather"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="38dp"
-        android:layout_marginTop="67dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notificationsubtext" />
 
     <TextView
         android:id="@+id/tempAndHumidity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="32dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cityForWeather" />
 
-    <Button
-        android:id="@+id/goToLocationPicker"
+    <TextView
+        android:id="@+id/notificationtext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:onClick="goToLocationPicker"
-        android:text="Use Location Picker"
-        app:layout_constraintBottom_toBottomOf="@+id/locationPickerLabel"
-        app:layout_constraintStart_toEndOf="@+id/locationPickerLabel"
-        app:layout_constraintTop_toTopOf="@+id/locationPickerLabel" />
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="24dp"
+        android:text="Notification Sender"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/simpleLocationPicker" />
+
+    <SurfaceView
+        android:id="@+id/motiondetectionview"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="52dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/simpleLocationPicker" />
+
+    <Switch
+        android:id="@+id/weathertoggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="60dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notificationtoggle" />
+
+    <Button
+        android:id="@+id/setdeviceidbutton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Set Device ID"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titletext"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="16dp"
+        android:text="Enable Notification Listening"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setdeviceidbutton" />
+
+    <TextView
+        android:id="@+id/weathermodelabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:text="Weather Mode"
+        app:layout_constraintBottom_toBottomOf="@+id/weathertoggle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/weathertoggle" />
+
+    <Switch
+        android:id="@+id/motionsensortoggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="60dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weathertoggle" />
+
+    <TextView
+        android:id="@+id/motionsensorlabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:text="Enable Motion Detection"
+        app:layout_constraintBottom_toBottomOf="@+id/motionsensortoggle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/motionsensortoggle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

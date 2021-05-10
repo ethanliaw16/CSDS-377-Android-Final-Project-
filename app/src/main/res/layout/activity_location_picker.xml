@@ -17,19 +17,14 @@
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="349dp"
+            android:layout_height="437dp"
             tools:context=".MapsActivity" />
-
-        <ListView
-            android:id="@+id/listPlaces"
-            android:layout_width="match_parent"
-            android:layout_height="168dp"></ListView>
 
         <TextView
             android:id="@+id/currentLocationText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="Tap a point on the map to change the location" />
 
         <Button
             android:id="@+id/currentLocationButton"

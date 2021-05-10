@@ -24,6 +24,11 @@ public class LampiNotificationListener extends NotificationListenerService {
         super.onCreate();
     }
 
+    @Override
+    public void onDestroy(){
+        stopSelf();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public String[] payloadFromGoogleNotification(Notification notification){
         String[] payload = new String[3];
@@ -77,7 +82,7 @@ public class LampiNotificationListener extends NotificationListenerService {
             if (mNotification!=null){
                 Bundle extras = mNotification.extras;
                 String allExtras = mNotification.extras.toString();
-                String[] payload = {"Unknown Application", "","Open your phone to see notification"};
+                String[] payload = {"Unknown Application", "Unknown Application","Open your phone to see notification"};
                 if(allExtras.contains(GOOGLE_APP_INFO)){
                     System.out.println("got google");
                     payload = payloadFromGoogleNotification(mNotification);
@@ -89,6 +94,9 @@ public class LampiNotificationListener extends NotificationListenerService {
                 else if (allExtras.contains(SNAP_APP_INFO)){
                     System.out.println("got snapchat");
                     payload = payloadFromSnapNotification(mNotification);
+                }
+                if(payload[2].length() > 140){
+                    payload[2] = payload[2].substring(0,140);
                 }
                 System.out.println(allExtras);
 

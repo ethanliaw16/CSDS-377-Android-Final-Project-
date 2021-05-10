@@ -77,7 +77,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
     private LatLng[] mLikelyPlaceLatLngs;
     private String currentState;
     private String currentCity;
-
+    private String currentDevice;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,9 +87,14 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
+        Intent intentFromMain = getIntent();
+        if(intentFromMain != null){
+            String deviceId = intentFromMain.getStringExtra("device");
+            if(deviceId != null){
+                currentDevice = deviceId;
+            }
+        }
         // Set up the views
-        lstPlaces = findViewById(R.id.listPlaces);
         locationText = findViewById(R.id.currentLocationText);
         String apiKey = getString(R.string.google_maps_key);
         Places.initialize(getApplicationContext(), apiKey);
@@ -172,6 +177,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         goToMain.putExtra("lon", locationMarker.getPosition().longitude);
         goToMain.putExtra("city", currentCity);
         goToMain.putExtra("state", currentState);
+        goToMain.putExtra("device", currentDevice);
         startActivity(goToMain);
     }
 
