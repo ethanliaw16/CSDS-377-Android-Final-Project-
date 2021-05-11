@@ -126,9 +126,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         motionDetectionViewHolder.addCallback(surfaceCallback);
         //motionDetectionViewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         locationPicker = findViewById(R.id.simpleLocationPicker);
-        ArrayAdapter<String> locationPickerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, cities);
-        locationPicker.setAdapter(locationPickerAdapter);
-        locationPicker.setOnItemSelectedListener(this);
 
         notificationToggle = (Switch) findViewById(R.id.notificationtoggle);
         notificationToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -163,6 +160,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         motionDetectionToggle = (Switch) findViewById(R.id.motionsensortoggle);
         motionDetectionToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(mDeviceId.isEmpty()){
+                    Toast.makeText(getBaseContext(), "Device ID not set - Motion Detection may not work properly", Toast.LENGTH_LONG).show();
+                }
                 notifyLampOfOnMotion = isChecked;
             }
         });
@@ -211,6 +211,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
                 cities = cityLocations.keySet().toArray(new String[cityLocations.keySet().size()]);
             }
+
+            ArrayAdapter<String> locationPickerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, cities);
+            locationPicker.setAdapter(locationPickerAdapter);
+            locationPicker.setOnItemSelectedListener(this);
+
             String deviceSavedInLocationPicker = intentFromLocationPicker.getStringExtra("device");
             if(deviceSavedInLocationPicker != null){
                 setDeviceIdTo(deviceSavedInLocationPicker);
@@ -220,16 +225,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         if(mDeviceId.isEmpty()){
             setDeviceId();
-        }
-
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED) {
-            System.out.println("Can write files woo");
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    1);
         }
     }
 
@@ -329,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Set up the input
         final EditText deviceIdInput = new EditText(this);
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        deviceIdInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        deviceIdInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT);
         builder.setView(deviceIdInput);
 
         // Set up the buttons
@@ -373,6 +368,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Intent intent = new Intent(context, LocationPickerActivity.class);
         intent.putExtra("device", mDeviceId);
         stopWeatherMode();
+        notifyLampOfOnMotion = false;
         startActivity(intent);
     }
 
@@ -605,9 +601,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
             try {
@@ -619,9 +612,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             Camera.Parameters parameters = camera.getParameters();
@@ -635,9 +625,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             inPreview = true;
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
             // Ignore
@@ -688,26 +675,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                 // Current frame (with changes)
                 // long bConversion = System.currentTimeMillis();
-                int[] img = null;
+                int[] myImage = null;
                 /**
                 if (Preferences.USE_RGB) {
                     img = ImageProcessing.decodeYUV420SPtoRGB(data, width, height);
                 } else {
                     img = ImageProcessing.decodeYUV420SPtoLuma(data, width, height);
                 }**/
-                img = MotionDetector.decodeYUV420SPtoRGB(data, width, height);
+                myImage = MotionDetector.decodeYUV420SPtoRGB(data, width, height);
                 // long aConversion = System.currentTimeMillis();
                 // Log.d(TAG, "Converstion="+(aConversion-bConversion));
 
                 // Current frame (without changes)
                 int[] org = null;
                 /**if (Preferences.SAVE_ORIGINAL && img != null)**/
-                if(img != null){
-                    org = img.clone();
+                if(myImage != null){
+                    org = myImage.clone();
                 }
 
 
-                if (img != null && detector.detect(img, width, height)) {
+                if (myImage != null && detector.detect(myImage, width, height)) {
 
                     if(notifyLampOfOnMotion){
                         if(allowOneDiff){
@@ -745,7 +732,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                         Bitmap bitmap = null;
                         /**if (Preferences.SAVE_CHANGES)**/
-                        bitmap = MotionDetector.rgbToBitmap(img, width, height);
+                        bitmap = MotionDetector.rgbToBitmap(myImage, width, height);
 
                         Log.i("motion-detector", "Saving.. previous=" + previous + " original=" + original + " bitmap=" + bitmap);
                         Looper.prepare();
