@@ -9,12 +9,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -53,7 +50,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -191,41 +187,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 
         mWeatherUpdateHandler = new Handler();
-        System.out.println("Checking Device ID");
-
-        Intent intentFromLocationPicker = getIntent();
-        if(intentFromLocationPicker != null){
-            double lat = intentFromLocationPicker.getDoubleExtra("lat", locationFromPicker.latitude);
-            double lon = intentFromLocationPicker.getDoubleExtra("lon", locationFromPicker.longitude);
-            String city = intentFromLocationPicker.getStringExtra("city");
-            String state = intentFromLocationPicker.getStringExtra("state");
-            String key = city + ", " + state;
-            locationFromPicker = new LatLng(lat,lon);
-            if(!cityLocations.containsKey(key) && city != null && state != null){
-
-                cityLocations.put(key, locationFromPicker);
-                locationQueue.add(city);
-                if(locationQueue.size() > 7){
-                    String keyToRemove = locationQueue.remove();
-                    cityLocations.remove(keyToRemove);
-                }
-                cities = cityLocations.keySet().toArray(new String[cityLocations.keySet().size()]);
-            }
-
-            ArrayAdapter<String> locationPickerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, cities);
-            locationPicker.setAdapter(locationPickerAdapter);
-            locationPicker.setOnItemSelectedListener(this);
-
-            String deviceSavedInLocationPicker = intentFromLocationPicker.getStringExtra("device");
-            if(deviceSavedInLocationPicker != null){
-                setDeviceIdTo(deviceSavedInLocationPicker);
-            }
-            Log.i("Location", "New location from location picker is " + locationFromPicker.toString());
-        }
-
-        if(mDeviceId.isEmpty()){
-            setDeviceId();
-        }
     }
 
     @Override
@@ -257,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         boolean myBoolean = savedInstanceState.getBoolean("MyBoolean");
         double myDouble = savedInstanceState.getDouble("myDouble");
         int myInt = savedInstanceState.getInt("MyInt");
+        System.out.println(myDouble + " " + myInt);
         mDeviceId= savedInstanceState.getString("device");
     }
 
@@ -264,13 +226,62 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onPause() {
         super.onPause();
         stopMotionDetection();
+        putIntentStuff();
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        putIntentStuff();
+    }
+
+    public void putIntentStuff(){
+        getIntent().putExtra("device", mDeviceId);
+    }
+
+    public void restoreStateFromIntent(){
+        Intent previous = getIntent();
+        if(previous != null){
+            String id = previous.getStringExtra("device");
+            if(id != null){
+                System.out.println("Got the device, its " + id);
+                setDeviceIdTo(id);
+            }
+
+            double lat = previous.getDoubleExtra("lat", locationFromPicker.latitude);
+            double lon = previous.getDoubleExtra("lon", locationFromPicker.longitude);
+            String city = previous.getStringExtra("city");
+            String state = previous.getStringExtra("state");
+            String key = city + ", " + state;
+            locationFromPicker = new LatLng(lat,lon);
+            if(!cityLocations.containsKey(key) && city != null && state != null) {
+
+                cityLocations.put(key, locationFromPicker);
+                locationQueue.add(city);
+                if (locationQueue.size() > 7) {
+                    String keyToRemove = locationQueue.remove();
+                    cityLocations.remove(keyToRemove);
+                }
+                cities = cityLocations.keySet().toArray(new String[cityLocations.keySet().size()]);
+            }
+
+            ArrayAdapter<String> locationPickerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, cities);
+            locationPicker.setAdapter(locationPickerAdapter);
+            locationPicker.setOnItemSelectedListener(this);
+        }
+
 
     }
+
 
     @Override
     public void onResume() {
         super.onResume();
         startMotionDetection();
+        restoreStateFromIntent();
+        if(mDeviceId.isEmpty()){
+            setDeviceId();
+        }
     }
 
     public void startMotionDetection(){
@@ -366,7 +377,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     public void goToLocationPicker(View view){
         Intent intent = new Intent(context, LocationPickerActivity.class);
-        intent.putExtra("device", mDeviceId);
         stopWeatherMode();
         notifyLampOfOnMotion = false;
         startActivity(intent);
